@@ -12,10 +12,22 @@ function App() {
   const [currentCard, setCurrentCard] = React.useState(0);
   const [currentLanguage, setCurrentLanguage] = React.useState("japanese");
 
+  let currentFileName = "untitled";
+
   const fr = new FileReader();
   fr.onload = function () {
-    const json = parser(fr.result);
-    setCards(JSON.parse(json));
+    var element = document.createElement("a");
+    element.setAttribute(
+      "href",
+      "data:text/plain;charset=utf-8," + encodeURIComponent(parser(fr.result))
+    );
+    element.setAttribute("download", `${currentFileName || "example"}.json`);
+    element.style.display = "none";
+    document.body.appendChild(element);
+    element.click(); //Execute download
+    document.body.removeChild(element);
+
+    //setCards(JSON.parse(json));
   };
 
   React.useEffect(() => {
@@ -23,6 +35,7 @@ function App() {
       "change",
       function (e) {
         var files = e.target.files;
+        currentFileName = files[0].name;
         fr.readAsText(files[0]);
       },
       false
@@ -32,18 +45,8 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <div class="form-group">
-          <div>
-            <label>Upload a CSV formatted file:</label>
-          </div>
-          <input
-            type="file"
-            id="fileupload"
-            class="form-control"
-            accept=".csv"
-            required
-          />
-        </div>
+        <div>Upload a CSV formatted file:</div>
+        <input type="file" id="fileupload" accept=".csv" required />
         <div id="output"></div>
         {cards && cards.length > 0 && (
           <Card

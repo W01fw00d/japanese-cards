@@ -1,56 +1,55 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Card } from "antd";
 import { Button } from "antd";
 
-import "../App.css";
+import "./Cards.css";
 
 import json from "../vocabularyLists/May7th_voc..xlsx - Sheet1.csv.json";
 
-function Cards() {
-  const [cards, setCards] = React.useState(json || []);
-  const [currentCard, setCurrentCard] = React.useState(0);
-  const [currentLanguage, setCurrentLanguage] = React.useState("japanese");
+export default () => {
+  const [cards, setCards] = useState(json || []);
+  const [currentCard, setCurrentCard] = useState(0);
+  const [currentLanguage, setCurrentLanguage] = useState("japanese");
 
-  console.log("json", json);
+  const LargeButton = ({ text, onClick }) => (
+    <Button type="primary" size="large" {...{ onClick }}>
+      {text}
+    </Button>
+  );
+
+  const FlipButton = () => (
+    <LargeButton
+      text="Flip"
+      onClick={() => {
+        setCurrentLanguage(
+          currentLanguage === "japanese" ? "english" : "japanese"
+        );
+      }}
+    />
+  );
+
+  const NextButton = () => (
+    <LargeButton
+      text="Next"
+      onClick={() => {
+        setCurrentLanguage("japanese");
+        setCurrentCard(currentCard + 1);
+      }}
+    />
+  );
 
   return (
-    <div className="App">
-      <header className="App-header">
-        Cards
-        {cards && cards.length > 0 && (
-          <Card
-            title={
-              <Button
-                type="primary"
-                onClick={() => {
-                  setCurrentLanguage(
-                    currentLanguage === "japanese" ? "english" : "japanese"
-                  );
-                }}
-              >
-                Flip
-              </Button>
-            }
-            extra={
-              <Button
-                type="primary"
-                onClick={() => {
-                  setCurrentLanguage("japanese");
-                  setCurrentCard(currentCard + 1);
-                }}
-              >
-                Next
-              </Button>
-            }
-            style={{ width: 300 }}
-          >
-            <p>{cards[currentCard][currentLanguage]}</p>
-          </Card>
-        )}
-      </header>
-    </div>
+    <>
+      {cards && cards.length > 0 && (
+        <Card
+          title={<FlipButton />}
+          extra={<NextButton />}
+          style={{ width: 300 }}
+        >
+          <p className="big-font">{cards[currentCard][currentLanguage]}</p>
+        </Card>
+      )}
+    </>
   );
-}
-
-export default Cards;
+};

@@ -1,46 +1,42 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 
 import parser from "../cvsToJsonParser.js";
 
-import "../App.css";
+export default () => {
+  const fileName = useRef("untitled");
 
-export default function Parser() {
-  let currentFileName = "untitled";
-
-  const fr = new FileReader();
-  fr.onload = function () {
+  const fileReader = new FileReader();
+  fileReader.onload = function () {
     var element = document.createElement("a");
     element.setAttribute(
       "href",
-      "data:text/plain;charset=utf-8," + encodeURIComponent(parser(fr.result))
+      "data:text/plain;charset=utf-8," +
+        encodeURIComponent(parser(fileReader.result))
     );
-    element.setAttribute("download", `${currentFileName || "example"}.json`);
+    element.setAttribute("download", `${fileName.current || "example"}.json`);
     element.style.display = "none";
     document.body.appendChild(element);
     element.click(); //Execute download
     document.body.removeChild(element);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     document.getElementById("fileupload").addEventListener(
       "change",
       function (e) {
         var files = e.target.files;
-        currentFileName = files[0].name;
-        fr.readAsText(files[0]);
+        fileName.current = files[0].name;
+        fileReader.readAsText(files[0]);
       },
       false
     );
-  }, [fr]);
+  }, [fileReader]);
 
   return (
-    <div className="App">
-      <header className="App-header">
-        Parser
-        <div>Upload a CSV formatted file:</div>
-        <input type="file" id="fileupload" accept=".csv" required />
-        <div id="output"></div>
-      </header>
-    </div>
+    <>
+      <div>Upload a CSV formatted file:</div>
+      <input type="file" id="fileupload" accept=".csv" required />
+      <div id="output"></div>
+    </>
   );
-}
+};

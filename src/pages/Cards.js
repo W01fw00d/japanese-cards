@@ -5,15 +5,15 @@ import { Button } from "antd";
 
 import "./Cards.css";
 
-import json from "../vocabularyLists/May7th_voc..xlsx - Sheet1.csv.json";
+import json from "../jsons/May7th_voc.json";
 
 export default () => {
-  const [cards, setCards] = useState(json || []);
+  const [cards] = useState(json || []);
   const [currentCard, setCurrentCard] = useState(0);
   const [currentLanguage, setCurrentLanguage] = useState("japanese");
 
-  const LargeButton = ({ text, onClick }) => (
-    <Button type="primary" size="large" {...{ onClick }}>
+  const LargeButton = ({ text, onClick, disabled }) => (
+    <Button type="primary" size="large" disabled={disabled} {...{ onClick }}>
       {text}
     </Button>
   );
@@ -29,15 +29,22 @@ export default () => {
     />
   );
 
-  const NextButton = () => (
-    <LargeButton
-      text="Next"
-      onClick={() => {
-        setCurrentLanguage("japanese");
-        setCurrentCard(currentCard + 1);
-      }}
-    />
-  );
+  const NextButton = () => {
+    const currentIsLastCard = currentCard >= cards.length - 1;
+
+    return (
+      <LargeButton
+        text={currentIsLastCard ? "Last card" : "Next"}
+        disabled={currentIsLastCard}
+        onClick={() => {
+          if (!currentIsLastCard) {
+            setCurrentLanguage("japanese");
+            setCurrentCard(currentCard + 1);
+          }
+        }}
+      />
+    );
+  };
 
   return (
     <>

@@ -1,24 +1,25 @@
 export default (csv) => {
-  const lines = csv.split("\n");
-
   const result = [];
 
-  // NOTE: If your columns contain commas in their values, you'll need
-  // to deal with those before doing the next step
-  // (you might convert them to &&& or something, then covert them back later)
-  // jsfiddle showing the issue https://jsfiddle.net/
-  const headers = lines[0].split(",");
+  const rows = csv.split("\n");
+  const headers = rows[0].split(",");
 
-  for (var i = 1; i < lines.length; i++) {
-    const obj = {};
-    const currentline = lines[i].split(",");
+  rows.forEach((row, index) => {
+    if (0 < index) {
+      const parseCurrentRow = () => {
+        const currentRow = row.split(",");
 
-    for (var j = 0; j < headers.length; j++) {
-      obj[headers[j]] = currentline[j];
+        const parsedRow = {};
+        headers.forEach((header, index) => {
+          parsedRow[header] = currentRow[index];
+        });
+
+        return parsedRow;
+      };
+
+      result.push(parseCurrentRow());
     }
-
-    result.push(obj);
-  }
+  });
 
   const mappedResult = result.map((row) => ({
     japanese: row["\r"],

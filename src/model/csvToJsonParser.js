@@ -1,23 +1,23 @@
 export default (csv) => {
-  const parseRows = () => {
-    const headerIndex = 0;
-    const rows = csv.split("\n");
-    const headers = rows[headerIndex].split(",");
+  const HEADER_INDEX = 0;
+  const ROWS_SPLITTER = "\n";
+  const CELL_SPLITTER = ",";
 
-    return rows.reduce((result, row, index) => {
-      if (index > headerIndex) {
-        const parseCurrentRow = () => {
-          const currentRow = row.split(",");
-          return headers.reduce((parsedRow, header, index) => {
-            parsedRow[header] = currentRow[index];
-            return parsedRow;
-          }, {});
-        };
+  const rows = csv.split(ROWS_SPLITTER);
 
-        result.push(parseCurrentRow());
-      }
-      return result;
-    }, []);
+  const headers = rows[HEADER_INDEX].split(CELL_SPLITTER);
+  const rowsReducer = (result, row, index) => {
+    if (index > HEADER_INDEX) {
+      const currentRow = row.split(CELL_SPLITTER);
+      const currentRowReducer = (parsedRow, header, index) => {
+        parsedRow[header] = currentRow[index];
+        return parsedRow;
+      };
+
+      result.push(headers.reduce(currentRowReducer, {}));
+    }
+
+    return result;
   };
 
   const csvMappingA = (row) => ({
@@ -25,5 +25,5 @@ export default (csv) => {
     english: row.English,
   });
 
-  return JSON.stringify(parseRows().map(csvMappingA));
+  return JSON.stringify(rows.reduce(rowsReducer, []).map(csvMappingA));
 };

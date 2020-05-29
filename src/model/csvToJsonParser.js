@@ -1,29 +1,24 @@
 export default (csv) => {
   const HEADER_INDEX = 0;
-  const ROWS_SPLITTER = "\n";
-  const CELL_SPLITTER = ",";
+  const SPLITTERS = { ROW: "\n", CELL: "," };
 
-  const rows = csv.split(ROWS_SPLITTER);
-
-  const headers = rows[HEADER_INDEX].split(CELL_SPLITTER);
-  const rowsReducer = (result, row, index) => {
-    if (index > HEADER_INDEX) {
-      const currentRow = row.split(CELL_SPLITTER);
-      const currentRowReducer = (parsedRow, header, index) => {
-        parsedRow[header] = currentRow[index];
-        return parsedRow;
-      };
-
-      result.push(headers.reduce(currentRowReducer, {}));
-    }
-
-    return result;
-  };
+  const rows = csv.split(SPLITTERS.ROW);
+  const headers = rows.splice(HEADER_INDEX, 1)[0].split(SPLITTERS.CELL);
 
   const csvMappingA = (row) => ({
     japanese: row["\r"],
     english: row.English,
   });
 
-  return JSON.stringify(rows.reduce(rowsReducer, []).map(csvMappingA));
+  return JSON.stringify(
+    rows
+      .map((row, index) => {
+        const currentRow = row.split(SPLITTERS.CELL);
+        return headers.reduce((parsedRow, header, index) => {
+          parsedRow[header] = currentRow[index];
+          return parsedRow;
+        }, {});
+      })
+      .map(csvMappingA)
+  );
 };

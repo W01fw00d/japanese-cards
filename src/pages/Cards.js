@@ -5,10 +5,12 @@ import { Button } from "antd";
 
 import "./Cards.css";
 
-import json from "../jsons/May7th_voc.json";
+import hiraganajson from "../jsons/May7th_voc.json";
+
+//import kanjiJson from "../jsons/Kanji Summary.json";
 
 export default () => {
-  const [cards] = useState(json || []);
+  const [cards] = useState(hiraganajson || []);
   const [currentCard, setCurrentCard] = useState(0);
   const [currentLanguage, setCurrentLanguage] = useState("japanese");
 

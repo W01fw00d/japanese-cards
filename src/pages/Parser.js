@@ -3,6 +3,8 @@ import React, { useRef, useEffect } from "react";
 import parser from "../model/csvToJsonParser.js";
 
 export default () => {
+  const mapper = "hiragana";
+
   const fileName = useRef("untitled");
 
   const fileReader = new FileReader();
@@ -11,7 +13,7 @@ export default () => {
     element.setAttribute(
       "href",
       "data:text/plain;charset=utf-8," +
-        encodeURIComponent(parser(fileReader.result))
+        encodeURIComponent(parser(fileReader.result, mapper))
     );
     element.setAttribute("download", `${fileName.current || "example"}.json`);
     element.style.display = "none";

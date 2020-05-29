@@ -1,30 +1,29 @@
 export default (csv) => {
-  const result = [];
+  const parseRows = () => {
+    const headerIndex = 0;
+    const rows = csv.split("\n");
+    const headers = rows[headerIndex].split(",");
 
-  const rows = csv.split("\n");
-  const headers = rows[0].split(",");
+    return rows.reduce((result, row, index) => {
+      if (index > headerIndex) {
+        const parseCurrentRow = () => {
+          const currentRow = row.split(",");
+          return headers.reduce((parsedRow, header, index) => {
+            parsedRow[header] = currentRow[index];
+            return parsedRow;
+          }, {});
+        };
 
-  rows.forEach((row, index) => {
-    if (0 < index) {
-      const parseCurrentRow = () => {
-        const currentRow = row.split(",");
+        result.push(parseCurrentRow());
+      }
+      return result;
+    }, []);
+  };
 
-        const parsedRow = {};
-        headers.forEach((header, index) => {
-          parsedRow[header] = currentRow[index];
-        });
-
-        return parsedRow;
-      };
-
-      result.push(parseCurrentRow());
-    }
-  });
-
-  const mappedResult = result.map((row) => ({
+  const csvMappingA = (row) => ({
     japanese: row["\r"],
     english: row.English,
-  }));
+  });
 
-  return JSON.stringify(mappedResult);
+  return JSON.stringify(parseRows().map(csvMappingA));
 };

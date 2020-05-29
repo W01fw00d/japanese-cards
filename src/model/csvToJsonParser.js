@@ -25,6 +25,5 @@ export default (csv) => {
     english: row.English,
   }));
 
-  //return result; //JavaScript object
-  return JSON.stringify(mappedResult); //JSON
+  return JSON.stringify(mappedResult);
 };

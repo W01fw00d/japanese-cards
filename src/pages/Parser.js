@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 
-import parser from "../cvsToJsonParser.js";
+import parser from "../model/csvToJsonParser.js";
 
 export default () => {
   const fileName = useRef("untitled");

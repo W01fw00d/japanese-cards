@@ -5,24 +5,16 @@ import { Button } from "antd";
 
 import { Select } from "antd";
 
-import "./Cards.css";
+import "./component.css";
 
-import hiraganajson from "../jsons/May7th_voc.json";
-import kanjiJson from "../jsons/Kanji Summary.json";
-
-export default () => {
+export default ({
+  cards,
+  vocabularyListKeys,
+  currentVocabularyListKey,
+  setCurrentVocabularyListKey,
+}) => {
   const { Option } = Select;
 
-  const vocabularyLists = {
-    hiragana1: hiraganajson,
-    kanji: kanjiJson,
-  };
-  const vocabularyListKeys = Object.keys(vocabularyLists);
-
-  const [currentVocabularyListKey, setCurrentVocabularyListKey] = useState(
-    vocabularyListKeys[0]
-  );
-  const [cards, setCards] = useState(vocabularyLists[vocabularyListKeys[0]]);
   const [currentCard, setCurrentCard] = useState(0);
   const [currentLanguage, setCurrentLanguage] = useState("japanese");
 
@@ -31,9 +23,9 @@ export default () => {
       defaultValue={currentVocabularyListKey}
       style={{ width: 120 }}
       onChange={(value) => {
-        setCurrentVocabularyListKey(value);
-        setCards(vocabularyLists[value]);
         setCurrentCard(0);
+        setCurrentLanguage("japanese");
+        setCurrentVocabularyListKey(value);
       }}
     >
       {vocabularyListKeys.map((key) => (

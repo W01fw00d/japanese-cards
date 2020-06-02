@@ -4,6 +4,7 @@ import parser from "../model/csvToJsonParser.js";
 
 export default () => {
   const mapper = "hiragana";
+  //const mapper = "kanji";
 
   const fileName = useRef("untitled");
 

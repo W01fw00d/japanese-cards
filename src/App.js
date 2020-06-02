@@ -9,7 +9,7 @@ import {
 
 import "./App.css";
 
-import Cards from "./pages/Cards";
+import Cards from "./pages/Cards/container";
 import Parser from "./pages/Parser";
 
 export default () => (

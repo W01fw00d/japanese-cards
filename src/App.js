@@ -10,7 +10,7 @@ import {
 import "./App.css";
 
 import Cards from "./pages/Cards/container";
-import Parser from "./pages/Parser";
+import Parser from "./pages/Parser/container";
 
 export default () => (
   <Router>

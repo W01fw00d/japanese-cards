@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 
-import { Card } from "antd";
-import { Button } from "antd";
-
-import { Select } from "antd";
+import { Card, Button, Select } from "antd";
 
 import "./component.css";
 
@@ -29,7 +26,9 @@ export default ({
       }}
     >
       {vocabularyListKeys.map((key) => (
-        <Option value={key}>{key}</Option>
+        <Option {...{ key }} value={key}>
+          {key}
+        </Option>
       ))}
     </Select>
   );

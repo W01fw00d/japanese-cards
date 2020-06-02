@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 
-import parser from "../model/csvToJsonParser.js";
+import parser from "./model/csvToJsonParser.js";
 
 export default () => {
   const mapper = "hiragana";
